@@ -66,8 +66,9 @@ static int WAI_PREFIX(getModulePath_)(HMODULE module, char* out, int capacity, i
   wchar_t buffer2[MAX_PATH];
   wchar_t* path = NULL;
   int length = -1;
+  bool ok;
 
-  for (;;)
+  for (ok = false; !ok; ok = true)
   {
     DWORD size;
     int length_, length__;
@@ -123,14 +124,12 @@ static int WAI_PREFIX(getModulePath_)(HMODULE module, char* out, int capacity, i
     }
 
     length = length__;
-
-    break;
   }
 
   if (path != buffer1)
     WAI_FREE(path);
 
-  return length;
+  return ok ? length : -1;
 }
 
 WAI_NOINLINE WAI_FUNCSPEC
@@ -189,8 +188,9 @@ int WAI_PREFIX(getExecutablePath)(char* out, int capacity, int* dirname_length)
   char buffer[PATH_MAX];
   char* resolved = NULL;
   int length = -1;
+  bool ok;
 
-  for (;;)
+  for (ok = false; !ok; ok = true)
   {
     resolved = realpath(WAI_PROC_SELF_EXE, buffer);
     if (!resolved)
@@ -215,11 +215,9 @@ int WAI_PREFIX(getExecutablePath)(char* out, int capacity, int* dirname_length)
         }
       }
     }
-
-    break;
   }
 
-  return length;
+  return ok ? length : -1;
 }
 
 #if !defined(WAI_PROC_SELF_MAPS_RETRY)
@@ -354,9 +352,6 @@ int WAI_PREFIX(getModulePath)(char* out, int capacity, int* dirname_length)
       break;
   }
 
-  if (maps)
-    fclose(maps);
-
   return length;
 }
 
@@ -377,8 +372,9 @@ int WAI_PREFIX(getExecutablePath)(char* out, int capacity, int* dirname_length)
   char* path = buffer1;
   char* resolved = NULL;
   int length = -1;
+  bool ok;
 
-  for (;;)
+  for (ok = false; !ok; ok = true)
   {
     uint32_t size = (uint32_t)sizeof(buffer1);
     if (_NSGetExecutablePath(path, &size) == -1)
@@ -411,14 +407,12 @@ int WAI_PREFIX(getExecutablePath)(char* out, int capacity, int* dirname_length)
         }
       }
     }
-
-    break;
   }
 
   if (path != buffer1)
     WAI_FREE(path);
 
-  return length;
+  return ok ? length : -1;
 }
 
 WAI_NOINLINE WAI_FUNCSPEC
@@ -485,8 +479,9 @@ int WAI_PREFIX(getExecutablePath)(char* out, int capacity, int* dirname_length)
   char* resolved = NULL;
   FILE* self_exe = NULL;
   int length = -1;
+  bool ok;
 
-  for (;;)
+  for (ok = false; !ok; ok = true)
   {
     self_exe = fopen(WAI_PROC_SELF_EXE, "r");
     if (!self_exe)
@@ -518,13 +513,11 @@ int WAI_PREFIX(getExecutablePath)(char* out, int capacity, int* dirname_length)
         }
       }
     }
-
-    break;
   }
 
   fclose(self_exe);
 
-  return length;
+  return ok ? length : -1;
 }
 
 WAI_FUNCSPEC
@@ -594,8 +587,9 @@ int WAI_PREFIX(getExecutablePath)(char* out, int capacity, int* dirname_length)
   char** argv = (char**)buffer1;
   char* resolved = NULL;
   int length = -1;
+  bool ok;
 
-  for (;;)
+  for (ok = false; !ok; ok = true)
   {
     int mib[4] = { CTL_KERN, KERN_PROC_ARGS, getpid(), KERN_PROC_ARGV };
     size_t size;
@@ -679,14 +673,12 @@ int WAI_PREFIX(getExecutablePath)(char* out, int capacity, int* dirname_length)
         }
       }
     }
-
-    break;
   }
 
   if (argv != (char**)buffer1)
     WAI_FREE(argv);
 
-  return length;
+  return ok ? length : -1;
 }
 
 #else
@@ -699,8 +691,9 @@ int WAI_PREFIX(getExecutablePath)(char* out, int capacity, int* dirname_length)
   char* path = buffer1;
   char* resolved = NULL;
   int length = -1;
+  bool ok;
 
-  for (;;)
+  for (ok = false; !ok; ok = true)
   {
 #if defined(__NetBSD__)
     int mib[4] = { CTL_KERN, KERN_PROC_ARGS, -1, KERN_PROC_PATHNAME };
@@ -735,11 +728,9 @@ int WAI_PREFIX(getExecutablePath)(char* out, int capacity, int* dirname_length)
         }
       }
     }
-
-    break;
   }
 
-  return length;
+  return ok ? length : -1;
 }
 
 #endif
