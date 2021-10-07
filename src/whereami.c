@@ -59,6 +59,7 @@ extern "C" {
 #if defined(_MSC_VER)
 #pragma warning(pop)
 #endif
+#include <stdbool.h>
 
 static int WAI_PREFIX(getModulePath_)(HMODULE module, char* out, int capacity, int* dirname_length)
 {
@@ -173,6 +174,7 @@ int WAI_PREFIX(getModulePath)(char* out, int capacity, int* dirname_length)
 #define __STDC_FORMAT_MACROS
 #endif
 #include <inttypes.h>
+#include <stdbool.h>
 
 #if !defined(WAI_PROC_SELF_EXE)
 #if defined(__sun)
@@ -237,6 +239,7 @@ int WAI_PREFIX(getExecutablePath)(char* out, int capacity, int* dirname_length)
 #include <sys/mman.h>
 #include <unistd.h>
 #endif
+#include <stdbool.h>
 
 WAI_NOINLINE WAI_FUNCSPEC
 int WAI_PREFIX(getModulePath)(char* out, int capacity, int* dirname_length)
@@ -363,6 +366,7 @@ int WAI_PREFIX(getModulePath)(char* out, int capacity, int* dirname_length)
 #include <stdlib.h>
 #include <string.h>
 #include <dlfcn.h>
+#include <stdbool.h>
 
 WAI_FUNCSPEC
 int WAI_PREFIX(getExecutablePath)(char* out, int capacity, int* dirname_length)
@@ -466,6 +470,7 @@ int WAI_PREFIX(getModulePath)(char* out, int capacity, int* dirname_length)
 #include <stdlib.h>
 #include <string.h>
 #include <dlfcn.h>
+#include <stdbool.h>
 
 #if !defined(WAI_PROC_SELF_EXE)
 #define WAI_PROC_SELF_EXE "/proc/self/exefile"
@@ -573,6 +578,7 @@ int WAI_PREFIX(getModulePath)(char* out, int capacity, int* dirname_length)
 #include <sys/types.h>
 #include <sys/sysctl.h>
 #include <dlfcn.h>
+#include <stdbool.h>
 
 #if defined(__OpenBSD__)
 
